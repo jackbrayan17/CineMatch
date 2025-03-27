@@ -1,0 +1,11 @@
+flask
+flask-sqlalchemy
+requests
+beautifulsoup4
+pymongo
+pillow
+torch
+torchvision
+numpy
+faiss-cpu
+python-dotenv
