@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Modifier Film</title>
+    
+    <!-- Performance Optimizations -->
+    <link rel="preload" href="https://cdn.tailwindcss.com" as="style">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    
+    <!-- Custom Styles -->
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap');
+        
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: rgba(0,0,0,0.1);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(220,38,38,0.7);
+            border-radius: 4px;
+        }
+        
+        /* Film Grain Effect */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none;
+            opacity: 0.04;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+            z-index: 9999;
+        }
+    </style>
+    
+    <!-- Tailwind Custom Configuration -->
+    <script>
+    tailwind.config = {
+        theme: {
+            fontFamily: {
+                'sans': ['Inter', 'ui-sans-serif', 'system-ui'],
+            },
+            extend: {
+                colors: {
+                    'cinema-dark': '#0F1123',
+                    'cinema-mid': '#1A2238',
+                    'cinema-light': '#2C3E50'
+                },
+                backgroundImage: {
+                    'cinema-gradient': 'linear-gradient(to bottom right, #0F1123, #1A2238, #2C3E50)'
+                },
+                animation: {
+                    'film-pulse': 'pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                    'subtle-bounce': 'bounce 2s ease-in-out infinite'
+                },
+                boxShadow: {
+                    'cinema-card': '0 15px 35px rgba(0,0,0,0.2), 0 5px 15px rgba(0,0,0,0.1)'
+                }
+            }
+        }
+    }
+    </script>
+</head>
+<body class="bg-gradient-to-br from-[#0F1123] via-[#1A2238] to-[#2C3E50] text-white font-sans antialiased min-h-screen flex items-center justify-center">
+    <div class="container mx-auto px-4 py-8 max-w-2xl">
+        <div class="bg-white/10 backdrop-blur-lg rounded-xl overflow-hidden shadow-cinema-card p-8 w-full">
+            <header class="mb-8 text-center">
+                <h1 class="text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white via-gray-200 to-gray-400 tracking-tight">
+                    🎬 Modifier Film
+                </h1>
+                <div class="h-1 bg-gradient-to-r from-transparent via-red-600 to-transparent mt-4 opacity-50"></div>
+            </header>
+
+            <form id="edit-movie-form" method="POST" enctype="multipart/form-data" class="space-y-6">
+                <div>
+                    <label class="block text-sm font-medium text-gray-300 mb-2">Titre</label>
+                    <input type="text" name="title" value="{{ movie.title }}" required 
+                        class="w-full px-4 py-3 bg-white/10 backdrop-blur-lg border-2 border-white/20 rounded-lg text-white placeholder-gray-300 focus:ring-4 focus:ring-red-500/50 transition duration-300">
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-gray-300 mb-2">Description</label>
+                    <textarea name="overview" rows="4" required 
+                        class="w-full px-4 py-3 bg-white/10 backdrop-blur-lg border-2 border-white/20 rounded-lg text-white placeholder-gray-300 focus:ring-4 focus:ring-red-500/50 transition duration-300">{{ movie.overview }}</textarea>
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-gray-300 mb-2">Date de sortie</label>
+                    <input type="date" name="release_date" value="{{ movie.release_date }}" 
+                        class="w-full px-4 py-3 bg-white/10 backdrop-blur-lg border-2 border-white/20 rounded-lg text-white placeholder-gray-300 focus:ring-4 focus:ring-red-500/50 transition duration-300">
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-gray-300 mb-2">Nouvelle Affiche</label>
+                    <div class="relative">
+                        <input type="file" name="poster" accept="image/*" 
+                            class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10">
+                        <div class="w-full px-4 py-3 bg-white/10 backdrop-blur-lg border-2 border-white/20 rounded-lg text-white flex items-center justify-between hover:border-red-500 transition duration-300">
+                            <span class="text-gray-300">Choisir un fichier</span>
+                            <i class="fas fa-upload text-white/50"></i>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="flex justify-between space-x-4 pt-4">
+                    <a href="/" class="flex-1 text-center bg-white/20 backdrop-blur-lg py-3 rounded-lg text-white hover:bg-gray-500/50 transition duration-300">
+                        <i class="fas fa-times mr-2"></i>Annuler
+                    </a>
+                    <button type="submit" class="flex-1 bg-red-600 text-white py-3 rounded-lg hover:bg-red-700 transition duration-300 flex items-center justify-center">
+                        <i class="fas fa-save mr-2"></i>Enregistrer
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+</html>
